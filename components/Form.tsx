@@ -1,10 +1,6 @@
 import React from "react";
 import Link from "next/link";
-
-interface Quote {
-  quote: string;
-  tag: string;
-}
+import { Quote } from "@types";
 
 interface FormType {
   type: string;
