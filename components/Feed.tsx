@@ -31,14 +31,15 @@ const Feed = () => {
 
   const handleSearchChange = (event: React.FormEvent) => {};
 
-  useEffect(() => {
-    const fetchQuotes = async () => {
-      const response = await axios.get("/api/quote");
-      setQuotes(response.data);
-    };
+  const fetchQuotes = async () => {
+    const response = await axios.get("/api/quote");
+    setQuotes(response.data);
+  };
 
+  useEffect(() => {
     fetchQuotes();
   }, []);
+
   return (
     <section className="feed">
       <form className="relative w-full flex-center">

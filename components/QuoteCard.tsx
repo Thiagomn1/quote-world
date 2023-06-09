@@ -18,6 +18,9 @@ const QuoteCard = ({
   handleDelete?: () => void;
 }) => {
   const [copied, setCopied] = useState("");
+  const { data: session } = useSession();
+  const pathname = usePathname();
+  const router = useRouter();
 
   const handleCopy = () => {
     setCopied(quote.quote);
@@ -70,6 +73,23 @@ const QuoteCard = ({
       >
         {quote.tag}
       </p>
+
+      {session?.user.id === quote?.creator?._id && pathname === "/profile" && (
+        <div className="mt-5 flex-center gap-4 border-t border-gray-100 pt-3">
+          <p
+            className="font-inter text-sm green_gradient cursor-pointer"
+            onClick={handleEdit}
+          >
+            Edit
+          </p>
+          <p
+            className="font-inter text-sm orange_gradient cursor-pointer"
+            onClick={handleDelete}
+          >
+            Delete
+          </p>
+        </div>
+      )}
     </div>
   );
 };

@@ -2,6 +2,7 @@ type Creator = {
   image: string;
   username: string;
   email: string;
+  _id: string;
 };
 
 export type Quote = {

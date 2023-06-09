@@ -1,6 +1,8 @@
 import Nav from "@components/Nav";
 import Provider from "@components/Provider";
 import "@styles/globals.css";
+import { SessionProvider } from "next-auth/react";
+import { Session } from "next-auth";
 
 export const metadata = {
   title: "Quote World",
