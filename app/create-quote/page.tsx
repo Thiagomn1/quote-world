@@ -12,10 +12,31 @@ const CreateQuote = () => {
   const router = useRouter();
 
   const [submitting, setSubmitting] = useState(false);
-  const [post, setPost] = useState({
-    quote: "",
-    tag: "",
-  });
+  const [quote, setQuote] = useState("");
+  const [tags, setTags] = useState<string[]>([]);
+  const [tagInput, setTagInput] = useState("");
+
+  const handleTagChange = (event: React.KeyboardEvent) => {
+    if (event.key === " ") {
+      event.preventDefault();
+    }
+
+    if (event.key === "Enter" && tagInput !== "") {
+      event.preventDefault();
+      let tag = tagInput;
+      if (!tagInput.startsWith("#")) {
+        tag = `#${tagInput}`;
+      }
+      setTags([...tags, tag]);
+      setTagInput("");
+    }
+  };
+
+  const handleTagDelete = (tagToRemove: string) => {
+    setTags((tags) => {
+      return tags.filter((tag) => tag !== tagToRemove);
+    });
+  };
 
   const createQuote = async (event: React.FormEvent) => {
     event.preventDefault();
@@ -23,9 +44,9 @@ const CreateQuote = () => {
 
     try {
       const bodyRequest = {
-        quote: post.quote,
+        quote,
         userId: session?.user.id,
-        tag: post.tag,
+        tags: JSON.stringify(tags),
       };
 
       const response = await axios.post("/api/quote/new", {
@@ -46,10 +67,15 @@ const CreateQuote = () => {
   return (
     <Form
       type="Create"
-      post={post}
-      setPost={setPost}
+      quote={quote}
+      setQuote={setQuote}
+      tags={tags}
+      tagInput={tagInput}
+      setTagInput={setTagInput}
       submitting={submitting}
       handleSubmit={createQuote}
+      handleTagChange={handleTagChange}
+      handleTagDelete={handleTagDelete}
     />
   );
 };

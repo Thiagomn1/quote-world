@@ -67,12 +67,16 @@ const QuoteCard = ({
       </div>
 
       <p className="my-4 font-satoshi text-sm text-gray-700">{quote.quote}</p>
-      <p
-        className="font-inter text-sm blue_gradient cursor-pointer"
-        onClick={() => handleTagClick?.(quote.tag)}
-      >
-        {quote.tag}
-      </p>
+      <div className="flex-row flex">
+        {JSON.parse(quote.tags).map((tag: string) => (
+          <p
+            className="font-inter text-sm blue_gradient cursor-pointer mr-2"
+            onClick={() => handleTagClick?.(tag)}
+          >
+            {tag}
+          </p>
+        ))}
+      </div>
 
       {session?.user.id === quote?.creator?._id && pathname === "/profile" && (
         <div className="mt-5 flex-center gap-4 border-t border-gray-100 pt-3">

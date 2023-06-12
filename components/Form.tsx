@@ -4,17 +4,33 @@ import { Quote } from "@types";
 
 interface FormType {
   type: string;
-  post: Quote;
-  setPost: React.Dispatch<React.SetStateAction<Quote>>;
+  quote: string;
+  tags: string[];
+  tagInput: string;
+  setTagInput: React.Dispatch<React.SetStateAction<string>>;
+  setQuote: React.Dispatch<React.SetStateAction<string>>;
   submitting: boolean;
   handleSubmit: (event: React.FormEvent) => void;
+  handleTagChange: (event: React.KeyboardEvent) => void;
+  handleTagDelete: (tagToRemove: string) => void;
 }
 
-const Form = ({ type, post, setPost, submitting, handleSubmit }: FormType) => {
+const Form = ({
+  type,
+  quote,
+  setQuote,
+  tags,
+  tagInput,
+  setTagInput,
+  handleTagChange,
+  handleTagDelete,
+  submitting,
+  handleSubmit,
+}: FormType) => {
   return (
     <section className="w-full max-w-full flex-start flex-col">
       <h1 className="head_text text-left">
-        <span className="blue_gradient">{type}</span> Post
+        <span className="blue_gradient">{type}</span> Quote
       </h1>
       <p className="desc text-left max-w-md">
         {type} and share amazing quotes with the world
@@ -29,10 +45,8 @@ const Form = ({ type, post, setPost, submitting, handleSubmit }: FormType) => {
             Your Quote
           </span>
           <textarea
-            value={post.quote}
-            onChange={(event) =>
-              setPost({ ...post, quote: event.target.value })
-            }
+            value={quote}
+            onChange={(event) => setQuote(event.target.value)}
             placeholder="Write your quote here..."
             required
             className="form_textarea"
@@ -44,12 +58,30 @@ const Form = ({ type, post, setPost, submitting, handleSubmit }: FormType) => {
             Tags
           </span>
           <input
-            value={post.tag}
-            onChange={(event) => setPost({ ...post, tag: event.target.value })}
+            value={tagInput}
+            disabled={tags.length === 3}
+            maxLength={15}
+            onChange={(event) => setTagInput(event.target.value)}
+            onKeyDown={handleTagChange}
             placeholder="#tag"
             required
             className="form_input"
           />
+          {tags.length > 0 && (
+            <div>
+              <div className="mt-2 flex flex-row">
+                {tags.map((tag) => (
+                  <p
+                    className="bg-slate-200 text-primary-orange rounded-md px-2 py-1 mr-2 "
+                    onClick={() => handleTagDelete(tag)}
+                    key={tag}
+                  >
+                    {tag}
+                  </p>
+                ))}
+              </div>
+            </div>
+          )}
         </label>
 
         <div className="flex-end mx-3 mb-5 gap-4">

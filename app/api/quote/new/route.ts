@@ -4,11 +4,11 @@ import { connectToDB } from "@utils/database";
 export async function POST(req: Request) {
   const json = await req.json();
   const body = JSON.parse(json.body);
-  const { quote, tag, userId } = body;
+  const { quote, tags, userId } = body;
 
   try {
     await connectToDB();
-    const newQuote = new Quote({ creator: userId, quote, tag });
+    const newQuote = new Quote({ creator: userId, quote, tags });
 
     await newQuote.save();
 
@@ -24,6 +24,8 @@ export async function POST(req: Request) {
       }
     );
   } catch (error) {
-    return new Response("Failed to create new quote", { status: 500 });
+    return new Response(`Failed to create new quote: ${error}`, {
+      status: 500,
+    });
   }
 }

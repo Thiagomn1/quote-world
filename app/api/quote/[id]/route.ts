@@ -32,7 +32,7 @@ export async function PATCH(
 ) {
   const json = await req.json();
   const body = JSON.parse(json.body);
-  const { quote, tag } = body;
+  const { quote, tags } = body;
 
   try {
     await connectToDB();
@@ -46,7 +46,8 @@ export async function PATCH(
     }
 
     existingQuote.quote = quote;
-    existingQuote.tag = tag;
+    existingQuote.tags = tags;
+    console.log(existingQuote);
 
     await existingQuote.save();
 

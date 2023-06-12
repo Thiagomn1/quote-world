@@ -9,7 +9,7 @@ const quoteSchema = new Schema({
     type: String,
     required: [true, "Quote is required."],
   },
-  tag: {
+  tags: {
     type: String,
     required: [true, "Tag is required."],
   },

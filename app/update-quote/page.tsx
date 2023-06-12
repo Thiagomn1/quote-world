@@ -14,10 +14,23 @@ const EditQuote = () => {
   const quoteId = searchParams.get("id");
 
   const [submitting, setSubmitting] = useState(false);
-  const [post, setPost] = useState({
-    quote: "",
-    tag: "",
-  });
+  const [quote, setQuote] = useState("");
+  const [tags, setTags] = useState<string[]>([]);
+  const [tagInput, setTagInput] = useState("");
+
+  const handleTagChange = (event: React.KeyboardEvent) => {
+    if (event.key === "Enter" && tagInput !== "") {
+      event.preventDefault();
+      setTags([...tags, tagInput]);
+      setTagInput("");
+    }
+  };
+
+  const handleTagDelete = (tagToRemove: string) => {
+    setTags((tags) => {
+      return tags.filter((tag) => tag !== tagToRemove);
+    });
+  };
 
   const updateQuote = async (event: React.FormEvent) => {
     event.preventDefault();
@@ -27,8 +40,8 @@ const EditQuote = () => {
 
     try {
       const bodyRequest = {
-        quote: post.quote,
-        tag: post.tag,
+        quote: quote,
+        tags: JSON.stringify(tags),
       };
 
       const response = await axios.patch(`/api/quote/${quoteId}`, {
@@ -48,11 +61,8 @@ const EditQuote = () => {
 
   const getQuoteDetails = async () => {
     const response = await axios.get(`/api/quote/${quoteId}`);
-
-    setPost({
-      quote: response.data.quote,
-      tag: response.data.tag,
-    });
+    setQuote(response.data.quote);
+    setTags(JSON.parse(response.data.tags));
   };
 
   useEffect(() => {
@@ -62,10 +72,15 @@ const EditQuote = () => {
   return (
     <Form
       type="Edit"
-      post={post}
-      setPost={setPost}
+      quote={quote}
+      setQuote={setQuote}
+      tags={tags}
+      tagInput={tagInput}
+      setTagInput={setTagInput}
       submitting={submitting}
       handleSubmit={updateQuote}
+      handleTagChange={handleTagChange}
+      handleTagDelete={handleTagDelete}
     />
   );
 };

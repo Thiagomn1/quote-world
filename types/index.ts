@@ -8,6 +8,6 @@ type Creator = {
 export type Quote = {
   _id?: string;
   quote: string;
-  tag: string;
+  tags: string;
   creator?: Creator;
 };
