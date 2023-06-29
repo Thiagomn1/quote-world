@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useId } from "react";
 import Link from "next/link";
 import { Quote } from "@types";
 
@@ -64,7 +64,6 @@ const Form = ({
             onChange={(event) => setTagInput(event.target.value)}
             onKeyDown={handleTagChange}
             placeholder="#tag"
-            required
             className="form_input"
           />
           {tags.length > 0 && (
@@ -74,7 +73,7 @@ const Form = ({
                   <p
                     className="bg-slate-200 text-primary-orange rounded-md px-2 py-1 mr-2 "
                     onClick={() => handleTagDelete(tag)}
-                    key={tag}
+                    key={useId()}
                   >
                     {tag}
                   </p>

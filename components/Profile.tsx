@@ -5,8 +5,8 @@ interface ProfileType {
   name: string;
   desc: string;
   data: Quote[];
-  handleEdit: (quote: Quote) => void;
-  handleDelete: (quote: Quote) => void;
+  handleEdit?: (quote: Quote) => void;
+  handleDelete?: (quote: Quote) => void;
 }
 
 const Profile = ({

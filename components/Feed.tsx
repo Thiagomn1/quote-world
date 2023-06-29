@@ -27,9 +27,9 @@ const QuoteCardList = ({
 
 const Feed = () => {
   const [searchText, setSearchText] = useState("");
+  const [searchTimeout, setSearchTimeout] = useState<any>(null);
+  const [searchedResults, setSearchedResults] = useState([]);
   const [quotes, setQuotes] = useState([]);
-
-  const handleSearchChange = (event: React.FormEvent) => {};
 
   const fetchQuotes = async () => {
     const response = await axios.get("/api/quote");
@@ -39,6 +39,36 @@ const Feed = () => {
   useEffect(() => {
     fetchQuotes();
   }, []);
+
+  const filterQuotes = (searchText: string) => {
+    const regex = new RegExp(searchText, "i");
+    return quotes.filter(
+      (item: Quote) =>
+        regex.test(item.creator?.username ?? "") ||
+        regex.test(item.tags) ||
+        regex.test(item.quote)
+    );
+  };
+
+  const handleSearchChange = (event: React.FormEvent) => {
+    const target = event.target as HTMLInputElement;
+    clearTimeout(searchTimeout);
+    setSearchText(target.value);
+
+    setSearchTimeout(
+      setTimeout(() => {
+        const searchResult = filterQuotes(target.value);
+        setSearchedResults(searchResult);
+      }, 500)
+    );
+  };
+
+  const handleTagClick = (tagName: string) => {
+    setSearchText(tagName);
+
+    const searchResult = filterQuotes(tagName);
+    setSearchedResults(searchResult);
+  };
 
   return (
     <section className="feed">
@@ -52,8 +82,11 @@ const Feed = () => {
           required
         />
       </form>
-
-      <QuoteCardList data={quotes} handleTagClick={() => {}} />
+      {searchText ? (
+        <QuoteCardList data={searchedResults} handleTagClick={handleTagClick} />
+      ) : (
+        <QuoteCardList data={quotes} handleTagClick={handleTagClick} />
+      )}
     </section>
   );
 };
