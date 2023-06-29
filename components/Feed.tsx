@@ -13,7 +13,7 @@ const QuoteCardList = ({
   handleTagClick: (tag: string) => void;
 }) => {
   return (
-    <div className="mt-16 prompt_layout">
+    <div className="mt-16 quote_layout">
       {data.map((quote: Quote) => (
         <QuoteCard
           key={quote._id}
